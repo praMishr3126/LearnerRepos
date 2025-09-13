@@ -1,0 +1,311 @@
+package com.example;
+
+import java.util.*;
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+record Employee(String name,String dept,Integer salary){}
+
+public class PractisePrograms {
+  public static void main(String[] args) {
+    List<Integer> ls = Arrays.asList(2, 4, 3, 8, 7, 9, 6, 1, 2, 1, 6);
+    List<String> ls5 = Arrays.asList("five","four","three","two","one");
+    List<List<String>> list= List.of(List.of("Six","Seven"),Arrays.asList("five","four","three","two","one"));
+
+    List<Integer> ls1 = Arrays.asList(1011, 2,4367, 3190, 8239, 7899,3,8, 9909);
+    int[] a1= new int[]{};
+    int[] a2= new int[]{};
+    List<Employee> employeeList = getEmployeeList();
+    Map<String,Integer> m1= new HashMap<>();
+
+    m1.put("Maths",72);
+    m1.put("English",66);
+    m1.put("Computer",92);
+    m1.put("Evs",78);
+
+    Map<String,Integer> m2= new HashMap<>();
+    m2.put("Maths",78);
+    m2.put("Evs",73);
+    m2.put("English",66);
+    m2.put("Science",78);
+    mergetwoArraysIntoSingleSortedArray(a1,a2);
+    fetchMultiplesOfGivenNumber(ls);
+    findDuplicatesInList(ls);
+    printFrequencyOfeachCharacterinString("Prashant");
+    printFrequencyOfeachElementInList(ls);
+    List<String> l4= Arrays.asList("Swiss", "cheese", "is the", "best","cheese","in" ,"the","world");
+
+    sortListInReverseOrder(ls);
+    minimumValueInList(ls);
+    maxValueInList(ls);
+    mergeTwoListsIntoSortedList(ls, ls1);
+    frequencyOfEachWordInSentence("I am practicing for Development");
+    firstNonDuplicateCharacterInString("Prashant");
+    secondNonDuplicateCharacterInString("Prashant");
+    firstDuplicateCharacterInString("Prashant");
+    secondDuplicateCharacterInString("Prashant");
+    fetchlastNonDuplicateCharacterFromString("Prashant");
+    sumOfNumbersInList(ls);
+    fetchLastElementfromList(ls);
+    sortMapByKey(m1);
+    sortMapByValue(m1);
+    List<Integer> ls2= Arrays.asList(1,-1,9,0,6,0,4,8,0,-7);
+    listofIntegersWithZeroesAtEnd(ls2);
+    convertListOfStringToListOfNumbers(ls5);
+    sumOfFirstTenNaturalNos();
+    reverseEachWordInString("Hi my name is Prashant");
+    reverseString("Prashant");
+    fetchOnlyKeysFromMap(m1);
+    mergeTwoMapsIntoSingle(m1,m2);
+    longestWordInList(ls5);
+    commonElementsBetweenTwoList(ls,ls1);
+    partitionListIntoOddEvenList(ls);
+    combineTwoListintoSingle(list);
+    groupEmployeesByDepartment(employeeList);
+    findEmployeeWithMaxSalary(employeeList);
+    countEmployeePerDepartment(employeeList);
+    sortListOfStringByLengthAndAlphabetically(l4);
+    sortEmployeeBySalaryThenByName(employeeList);
+  }
+
+
+  private static List<Employee> getEmployeeList() {
+    Employee emp = new Employee("Prashant", "Development", 280000);
+    Employee emp1 = new Employee("Shushant", "Electrical", 498000);
+    Employee emp2 = new Employee("Kajal", "IT", 980000);
+    Employee emp3 = new Employee("Shubha", "Development", 564000);
+    Employee emp4 = new Employee("Yashmak", "Development", 964000);
+    Employee emp5 = new Employee("Yash", "Electrical", 968000);
+    Employee emp6 = new Employee("Ashoka", "IT", 764000);
+    return List.of(emp, emp1, emp2, emp3, emp4, emp5, emp6);
+  }
+  private static Map<String, List<Integer>> getTopSalariesPerDepartment(List<Employee> employees) {
+    return employees.stream()
+            .collect(Collectors.groupingBy(Employee::dept,
+                    Collectors.collectingAndThen(
+                            Collectors.mapping(Employee::salary, Collectors.toList()),
+                            list -> list.stream()
+                                    .sorted(Comparator.reverseOrder())
+                                    .limit(3)
+                                    .collect(Collectors.toList())
+                    )));}
+
+  private static void sortEmployeeBySalaryThenByName(List<Employee> employeeList) {
+             employeeList.stream()
+                         .sorted(Comparator.comparing(Employee::salary)
+                         .thenComparing(Employee::name))
+                         .forEach(System.out::println);
+  }
+
+  private static void countEmployeePerDepartment(List<Employee> employeeList) {
+    Map<String, Long> employeeCountPerDepartment =
+                   employeeList.stream().filter(e->e.dept().equals("IT"))
+                               .collect(Collectors.groupingBy(Employee::dept, Collectors.counting()));
+    }
+
+    private static void findEmployeeWithMaxSalary(List<Employee> employeeList) {
+    Employee maxSalary = employeeList.stream().max(Comparator.comparing(Employee::salary)).orElseThrow();}
+
+    private static void groupEmployeesByDepartment(List<Employee> employeeList) {
+
+  Map<String,List<Employee>> mp = employeeList.stream().collect(Collectors.groupingBy(Employee::dept));}
+
+    private static void combineTwoListintoSingle(List<List<String>> ls1) {
+      List<String> combinedList= ls1.stream().flatMap(Collection::stream).toList();
+    }
+
+    private static void partitionListIntoOddEvenList(List<Integer> ls) {
+      Map<Boolean,List<Integer>> mp = ls.stream().collect(Collectors.partitioningBy(n->n%2==0));
+    }
+
+    private static void commonElementsBetweenTwoList(List<Integer> ls, List<Integer> ls1) {
+
+  ls1.stream().filter(ls::contains).collect(Collectors.toSet());}
+
+    private static void longestWordInList(List<String> ls5) {
+      ls5.stream().max(Comparator.comparing(String::length)).get();
+    }
+
+    private static void convertListOfStringToListOfNumbers(List<String> ls) {
+      ls.stream().map(Integer::parseInt).collect(Collectors.toList());
+    }
+
+    private static void sortListOfStringByLengthAndAlphabetically(List<String> ls) {
+    ls.stream()
+        .sorted(Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder()))
+        .forEach(System.out::println);
+    }
+
+    private static void frequencyOfEachWordInSentence(String str) {
+        Map<String, Long> freq = Arrays.stream(str.split(" "))
+                                  .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        freq.forEach((k,v)->System.out.println(k+" "+ v));
+    }
+
+    private static void findDuplicatesInList(List<Integer> ls) {
+      ls.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream()
+              .filter(e->e.getValue()>1).map(Map.Entry::getKey).collect(Collectors.toSet());
+      HashSet<Integer> hs = new HashSet();
+    ls.stream().filter(n->!hs.add(n)).collect(Collectors.toSet());
+    }
+
+  private static void listofIntegersWithZeroesAtEnd(List<Integer> ls2) {
+    Stream.concat(ls2.stream().filter(n -> n != 0), ls2.stream().filter(n -> n == 0))
+        .collect(Collectors.toSet());
+  }
+
+  private static void sortMapByValue(Map<String, Integer> m1) {
+    LinkedHashMap<String, Integer> sortByValue =
+        m1.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+  }
+
+  private static void sortMapByKey(Map<String, Integer> m1) {
+    LinkedHashMap<String, Integer> sortByKey =
+        m1.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+  }
+
+  private static void mergetwoArraysIntoSingleSortedArray(int[] a1, int[] a2) {
+
+    int[] mergedAndSortedArray =
+        IntStream.concat(IntStream.of(a1), IntStream.of(a2)).distinct().sorted().toArray();
+  }
+
+  private static void reverseString(String str) {
+   new StringBuilder(str).reverse().toString();}
+
+  private static void reverseEachWordInString(String str) {
+    Arrays.stream(str.split(" "))
+        .map(w -> new StringBuilder(w).reverse().toString())
+        .collect(Collectors.joining(" "));
+  }
+
+  private static void fetchOnlyKeysFromMap(Map<String, Integer> m1) {
+    m1.keySet().stream().collect(Collectors.toSet());
+  }
+
+  private static void sumOfFirstTenNaturalNos() {
+    int s= IntStream.range(1,10).sum();
+  }
+
+  private static void mergeTwoMapsIntoSingle(Map<String, Integer> m1, Map<String, Integer> m2) {
+    Map<String,Integer> hm = new HashMap<>(m1);
+    m2.forEach((key,value)->hm.merge(key,value,(v1,v2)->v1+v2));
+    hm.forEach((k,v)->System.out.println(k+" "+ v));
+  }
+  private static void mergeMapsToSingleMapViaHighestValue(Map<String, Integer> m1, Map<String, Integer> m2) {
+    Map<String,Integer> hm = new HashMap<>(m1);
+    m2.forEach((key,value)->hm.merge(key,value,Integer::max));
+    hm.forEach((k,v)->System.out.println(k+" "+ v));
+  }
+
+  private static void fetchlastNonDuplicateCharacterFromString(String str) {
+        Map<Character, Long> mp = str.chars()
+                .mapToObj(e -> (char) e)
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+
+
+        Character lastNonDuplicateCharacter = null;
+        for (Map.Entry<Character, Long> entry : mp.entrySet()) {
+            if (entry.getValue() == 1) {
+                lastNonDuplicateCharacter = entry.getKey();
+            }
+        }
+
+        if (lastNonDuplicateCharacter != null) {
+            System.out.println("Last Non-Duplicate Character: " + lastNonDuplicateCharacter);
+        } else {
+            System.out.println("No non-duplicate character found.");
+        }
+
+    }
+
+    private static void fetchLastElementfromList(List<Integer> ls) {
+     Integer i= ls.stream().skip(ls.size()-1).findFirst().get();
+    }
+
+  private static void sumOfNumbersInList(List<Integer> ls) {
+    int value=ls.stream().filter(e->e%2==0).mapToInt(Integer::intValue).sum();
+  }
+
+  private static void secondDuplicateCharacterInString(String str) {
+    Map<Character, Long> mp =
+        str.chars()
+            .mapToObj(e -> (char) e)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Character secondDuplicateCharacter =
+        mp.entrySet().stream().filter(e -> e.getValue() > 1).skip(1).findFirst().get().getKey();
+  }
+
+  private static void firstDuplicateCharacterInString(String str) {
+    Map<Character, Long> mp =
+        str.chars()
+            .mapToObj(e -> (char) e)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Character firstDuplicateCharacter =
+        mp.entrySet().stream().filter(e -> e.getValue() > 1).findFirst().get().getKey();
+  }
+
+  private static void secondNonDuplicateCharacterInString(String str) {
+    Map<Character, Long> mp =
+        str.chars()
+            .mapToObj(e -> (char) e)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Character secondNonDuplicateCharacter =
+        mp.entrySet().stream().filter(e -> e.getValue() == 1).skip(1).findFirst().get().getKey();
+  }
+
+  private static void firstNonDuplicateCharacterInString(String str) {
+    Map<Character, Long> mp =
+        str.chars()
+            .mapToObj(e -> (char) e)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Character firstNonDuplicateCharacter =
+        mp.entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey).findFirst().get();
+  }
+
+  private static void mergeTwoListsIntoSortedList(List<Integer> ls, List<Integer> ls1) {
+
+    Stream.concat(ls.stream(), ls1.stream()).sorted().distinct().forEach(System.out::println);
+  }
+
+  private static void minimumValueInList(List<Integer> ls) {
+    ls.stream().min(Comparator.naturalOrder()).get();
+  }
+
+  private static void maxValueInList(List<Integer> ls) {
+    ls.stream().max(Comparator.naturalOrder()).get();
+  }
+
+  private static void sortListInReverseOrder(List<Integer> ls) {
+    ls.stream().sorted(Comparator.reverseOrder()).forEach(System.out::println);
+  }
+
+  private static void printFrequencyOfeachElementInList(List<Integer> ls) {
+    Map<Integer, Long> mp =
+        ls.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    mp.entrySet().forEach(i -> System.out.println(i.getKey() + " " + i.getValue()));
+  }
+
+  private static void printFrequencyOfeachCharacterinString(String str) {
+
+    Map<Character, Long> hm =
+        str.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    hm.entrySet().forEach(i -> System.out.println(i.getKey() + " " + i.getValue()));
+  }
+
+  private static void fetchMultiplesOfGivenNumber(List<Integer> b) {
+    b.stream().filter(i -> i > 5).forEach(System.out::println);
+  }
+}
