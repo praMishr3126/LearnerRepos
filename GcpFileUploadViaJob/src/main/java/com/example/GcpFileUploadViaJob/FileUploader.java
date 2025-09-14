@@ -1,4 +1,3 @@
-// Java::FileUploader.java::src/main/java/com/example/GcpFileUploadViaJob/FileUploader.java
 package com.example.GcpFileUploadViaJob;
 
 import com.google.cloud.storage.Storage;
@@ -24,16 +23,20 @@ public class FileUploader {
   @Autowired private Storage storage;
 
   @Value("{bucket.name}")
-  private String bucket;
+  private String bucketName;
+
+  @Value("{file.path}")
+  private String filePath;
+
+  @Value("{file.name}")
+  private String fileName;
 
   @PostMapping("/send-data")
   public void fileUpload() throws IOException {
-    BlobId id = BlobId.of(bucket, "ProgramFiles.txt");
+    BlobId id = BlobId.of(bucketName, fileName);
     BlobInfo info = BlobInfo.newBuilder(id).build();
 
-    File file =
-        new File(
-            "C:\\Users\\pramishr33\\Learning\\GcpFileUploadViaJob\\src\\main\\resources\\ProgramFiles");
+    File file = new File(filePath);
 
     byte[] arr = Files.readAllBytes(Paths.get(file.toURI()));
     storage.create(info, arr);
